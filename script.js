@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const API_BASE = "https://mentalhealth-1-hf1m.onrender.com/";
+  const API_BASE = "https://mentalhealth-1-hf1m.onrender.com";
   const GAUGE_ARC_LENGTH = 314.16; // pi * r(100)
   const PLATFORMS = ["Instagram","TikTok","YouTube","WhatsApp","Snapchat","Facebook","Twitter","LinkedIn","LINE","KakaoTalk","VKontakte","WeChat"];
 
