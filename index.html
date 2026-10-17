@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mental Health Signal — Student Wellness Analytics</title>
+<meta name="theme-color" content="#070B14" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- animated aurora background -->
+<div class="aurora" aria-hidden="true">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <span class="grid-bg"></span>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <span class="eyebrow"><i class="live-dot"></i> Student Wellness Analytics</span>
+    <h1 class="title">Mental Health <em>Signal</em></h1>
+    <p class="subtitle">A quick read on how your habits, screen time and stress interact — modelled from your daily rhythm, not a diagnosis.</p>
+    <div class="header-stats">
+      <div><b>12</b><span>inputs analysed</span></div>
+      <div><b>0–10</b><span>wellness score</span></div>
+      <div><b>~2s</b><span>to your result</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- FORM PANEL -->
+  <section class="panel form-panel" aria-labelledby="form-heading">
+    <div class="panel-head">
+      <h2 id="form-heading">Your daily rhythm</h2>
+      <button type="button" class="ghost-btn" id="sample-btn">✦ Fill sample</button>
+    </div>
+
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+    <form id="predict-form" novalidate>
+
+      <fieldset class="group">
+        <legend><span class="legend-index">01</span> Profile</legend>
+        <div class="grid grid-3">
+          <div class="field">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="10" max="100" step="1" required placeholder="e.g. 21" />
+            <span class="error-msg" data-for="age"></span>
+          </div>
+          <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="" disabled selected hidden>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <span class="error-msg" data-for="gender"></span>
+          </div>
+          <div class="field">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" list="country-list" required placeholder="e.g. India" autocomplete="off" />
+            <datalist id="country-list">
+              <option value="India"></option><option value="USA"></option><option value="Canada"></option>
+              <option value="Australia"></option><option value="UK"></option><option value="Germany"></option>
+              <option value="Mexico"></option><option value="Turkey"></option><option value="France"></option>
+            </datalist>
+            <span class="error-msg" data-for="country"></span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend><span class="legend-index">02</span> Academic &amp; Digital Habits</legend>
+        <div class="grid grid-2">
+          <div class="field">
+            <label for="academic_level">Academic level</label>
+            <select id="academic_level" name="academic_level" required>
+              <option value="" disabled selected hidden>Select</option>
+              <option value="High School">High School</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Graduate">Graduate</option>
+            </select>
+            <span class="error-msg" data-for="academic_level"></span>
+          </div>
+          <div class="field">
+            <label for="purpose_of_use">Primary purpose</label>
+            <select id="purpose_of_use" name="purpose_of_use" required>
+              <option value="" disabled selected hidden>Select</option>
+              <option value="Networking">Networking</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="News">News</option>
+            </select>
+            <span class="error-msg" data-for="purpose_of_use"></span>
+          </div>
+
+          <div class="field field-span">
+            <label>Most-used platform</label>
+            <div class="chips" id="platform_group" data-target="most_used_platform"></div>
+            <input type="hidden" id="most_used_platform" name="most_used_platform" required />
+            <span class="error-msg" data-for="most_used_platform"></span>
+          </div>
+
+          <div class="field">
+            <label for="avg_daily_usage_hours">Avg. daily screen time</label>
+            <div class="slider-field">
+              <input type="range" class="range" data-sync="avg_daily_usage_hours" min="0" max="16" step="0.5" value="0" aria-label="Screen time slider" />
+              <div class="unit-input">
+                <input type="number" id="avg_daily_usage_hours" name="avg_daily_usage_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
+                <span class="unit">hrs</span>
+              </div>
+            </div>
+            <span class="error-msg" data-for="avg_daily_usage_hours"></span>
+          </div>
+          <div class="field">
+            <label for="daily_unlocks">Daily phone unlocks</label>
+            <div class="slider-field">
+              <input type="range" class="range" data-sync="daily_unlocks" min="0" max="250" step="5" value="0" aria-label="Unlocks slider" />
+              <div class="unit-input">
+                <input type="number" id="daily_unlocks" name="daily_unlocks" min="0" step="1" required placeholder="60" />
+                <span class="unit">×</span>
+              </div>
+            </div>
+            <span class="error-msg" data-for="daily_unlocks"></span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend><span class="legend-index">03</span> Lifestyle &amp; Stress</legend>
+        <div class="grid grid-3">
+          <div class="field">
+            <label for="study_hours">Study hours / day</label>
+            <div class="slider-field">
+              <input type="range" class="range" data-sync="study_hours" min="0" max="16" step="0.5" value="0" aria-label="Study slider" />
+              <div class="unit-input">
+                <input type="number" id="study_hours" name="study_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
+                <span class="unit">hrs</span>
+              </div>
+            </div>
+            <span class="error-msg" data-for="study_hours"></span>
+          </div>
+          <div class="field">
+            <label for="physical_activity_hours">Physical activity / day</label>
+            <div class="slider-field">
+              <input type="range" class="range" data-sync="physical_activity_hours" min="0" max="6" step="0.25" value="0" aria-label="Activity slider" />
+              <div class="unit-input">
+                <input type="number" id="physical_activity_hours" name="physical_activity_hours" min="0" max="24" step="0.1" required placeholder="0.0" />
+                <span class="unit">hrs</span>
+              </div>
+            </div>
+            <span class="error-msg" data-for="physical_activity_hours"></span>
+          </div>
+          <div class="field">
+            <label for="sleep_hours_per_night">Sleep / night</label>
+            <div class="slider-field">
+              <input type="range" class="range" data-sync="sleep_hours_per_night" min="0" max="12" step="0.25" value="0" aria-label="Sleep slider" />
+              <div class="unit-input">
+                <input type="number" id="sleep_hours_per_night" name="sleep_hours_per_night" min="0" max="24" step="0.1" required placeholder="0.0" />
+                <span class="unit">hrs</span>
+              </div>
+            </div>
+            <span class="error-msg" data-for="sleep_hours_per_night"></span>
+          </div>
+          <div class="field field-span">
+            <label>Perceived stress level</label>
+            <div class="segmented" id="stress_level_group">
+              <button type="button" class="seg-btn" data-value="Low">Low</button>
+              <button type="button" class="seg-btn" data-value="Medium">Medium</button>
+              <button type="button" class="seg-btn" data-value="High">High</button>
+              <button type="button" class="seg-btn" data-value="Very High">Very High</button>
+            </div>
+            <input type="hidden" id="stress_level" name="stress_level" required />
+            <span class="error-msg" data-for="stress_level"></span>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="form-footer">
+        <p class="privacy-note">🔒 Nothing is stored — your inputs go only to your local model.</p>
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span class="btn-label">Read my signal</span>
+          <svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- RESULT PANEL -->
+  <aside class="panel result-panel" aria-live="polite">
+    <div class="result-inner" id="result-inner">
+
+      <div class="state state-idle" id="state-idle">
+        <svg class="gauge" viewBox="0 0 240 160" aria-hidden="true">
+          <path class="gauge-track" d="M 30 140 A 100 100 0 0 1 210 140" />
+          <g class="gauge-ticks"></g>
+        </svg>
+        <p class="idle-label">Your score will appear here</p>
+        <p class="idle-copy">Fill in the form and submit to generate a predicted mental health score from 0–10.</p>
+      </div>
+
+      <div class="state state-loading" id="state-loading" hidden>
+        <div class="pulse-ring"><span></span></div>
+        <p class="loading-label">Reading the signal…</p>
+        <p class="loading-copy">Running your habits through the model.</p>
+      </div>
+
+      <div class="state state-result" id="state-result" hidden>
+        <svg class="gauge" viewBox="0 0 240 160" aria-hidden="true">
+          <defs>
+            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF6B6B"/>
+              <stop offset="45%" stop-color="#FFC857"/>
+              <stop offset="100%" stop-color="#3DDC97"/>
+            </linearGradient>
+            <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path class="gauge-track" d="M 30 140 A 100 100 0 0 1 210 140" />
+          <path class="gauge-fill" id="gauge-fill" d="M 30 140 A 100 100 0 0 1 210 140" filter="url(#glow)" />
+          <g class="gauge-ticks"></g>
+          <g class="needle" id="needle"><line x1="120" y1="140" x2="120" y2="62" /></g>
+          <circle class="gauge-needle-hub" cx="120" cy="140" r="6" />
+        </svg>
+        <div class="score-readout">
+          <span class="score-number" id="score-number">0.00</span>
+          <span class="score-max">/10</span>
+        </div>
+        <p class="score-band" id="score-band">—</p>
+        <p class="score-context" id="score-context"></p>
+
+        <div class="insights" id="insights" aria-label="Habit insights"></div>
+
+        <button type="button" class="reset-btn" id="reset-btn">Run another read</button>
+      </div>
+
+      <div class="state state-error" id="state-error" hidden>
+        <div class="error-icon" aria-hidden="true">!</div>
+        <p class="error-label" id="error-label"></p>
+        <p class="error-copy" id="error-copy"></p>
+        <button type="button" class="reset-btn" id="error-retry-btn">Try again</button>
+      </div>
+
+    </div>
+  </aside>
+
+</main>
+
+<footer class="site-footer">
+  <p>Built for informational purposes only — this is not a clinical assessment. If you're struggling, please talk to someone you trust.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
